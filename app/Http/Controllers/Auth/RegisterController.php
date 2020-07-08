@@ -52,9 +52,15 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255','unique:users'],
             // 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'string', 'min:8','regex:/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}/'],
         ]);
     }
+
+// 2.'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*(_|[^\w])).+$/'
+    //REGEX
+  // SPECIAL CHAR       (?=.*?[#?!@$%^&*-])
+// ONE NUMBER           (?=.*?[0-9])
+// One letter           (^[A-Za-z]\\d+$)
 
     /**
      * Create a new user instance after a valid registration.
