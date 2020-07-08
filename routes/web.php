@@ -24,3 +24,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::get('/fetch_data','CalendarController@fetchData');
+
+Route::post('/postEvent','CalendarController@addEvent')->name('addEvent');

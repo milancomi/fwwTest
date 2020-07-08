@@ -1,21 +1,4 @@
-{{-- @extends('layouts.app')
 
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-
-                <div id="reactApp">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endsection --}}
-<!DOCTYPE html>
-<html>
-<head>
 <meta charset='utf-8' />
 <link href='assets/fullcalendar/packages/core/main.css' rel='stylesheet' />
 <link href='assets/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
@@ -26,9 +9,10 @@
 <script src='assets/fullcalendar/packages/daygrid/main.js'></script>
 <script src='assets/fullcalendar/packages/timegrid/main.js'></script>
 <script src='assets/fullcalendar/packages/list/main.js'></script>
+<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script>
 
-  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -36,22 +20,53 @@
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'timeGridDay,timeGridWeek,listWeek'
+        right: 'listWeek'
       },
       selectable:true,
       selectHelper:true,
       select:function(start,end,allDay)
       {
+
+        console.log(start);
+          /*  var start = calendar.formatDate(start,"Y-MM-DD HH:mm:ss");
+          var start = calendar.formatDate(start,"Y-MM-DD HH:mm:ss");
+            var end = calendar.formatDate(end,"Y-MM-DD HH:mm:ss");
+            */
+           var startEvent = start.startStr;
+           var endEvent = start.endStr;
+
+        console.log(startEvent,endEvent);
         var title = prompt("Enter Event Title");
         if(title)
         {
-            var start = calendar.formatDate(start,);
+
+            $.ajax({
+               type:'POST',
+                url:"{{route('addEvent')}}",
+               data:{
+                   _token:"{{ csrf_token() }}",
+                   title:title,
+                   start:startEvent,
+                   end:endEvent,
+                   start2:start.start,
+                   end2:start.end
+               },
+               success:function(data) {
+                console.log(data);
+                   calendar.refetchEvents();
+                   alert("Added Successfully")
+
+
+               }
+            });
         }
 
-      },
+         },
       defaultDate: '2020-05-12',
       navLinks: true, // can click day/week names to navigate views
       editable: true,
+      eventOverlap:false,
+      displayEventTime: false,
       locale:"sr",
       eventLimit: true, // allow "more" link when too many events
 
