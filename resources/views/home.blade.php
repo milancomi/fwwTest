@@ -38,11 +38,31 @@
         center: 'title',
         right: 'timeGridDay,timeGridWeek,listWeek'
       },
+      selectable:true,
+      selectHelper:true,
+      select:function(start,end,allDay)
+      {
+        var title = prompt("Enter Event Title");
+        if(title)
+        {
+            var start = calendar.formatDate(start,);
+        }
+
+      },
       defaultDate: '2020-05-12',
       navLinks: true, // can click day/week names to navigate views
       editable: true,
       locale:"sr",
       eventLimit: true, // allow "more" link when too many events
+
+  eventClick: function(info) {
+    alert('Event: ' + info.event.title);
+    alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
+    alert('View: ' + info.view.type);
+
+    // change the border color just for fun
+    info.el.style.borderColor = 'red';
+  },
       events: {
         url: 'fetch_data',
         failure: function() {
