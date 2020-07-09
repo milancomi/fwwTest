@@ -17,7 +17,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -26,3 +26,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/fetch_data','CalendarController@fetchData');
 
 Route::post('/postEvent','CalendarController@addEvent')->name('addEvent');
+
+Route::post('/register','Auth\RegisterController@registerUser')->name('registerUser');
+
+
+Route::get('/register','Auth\RegisterController@showRegistrationForm')->name('register');
+Route::get('/calendar','HomeController@index')->name('calendar');

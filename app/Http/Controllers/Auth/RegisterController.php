@@ -8,45 +8,41 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
+use JWTAuth;
+use JWTAuthException;
+use Session;
+
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
-    /**
-     * Where to redirect users after registration.
-     *
-     * @var string
-     */
-    protected $redirectTo = RouteServiceProvider::HOME;
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    private function getToken($name, $password)
     {
-        $this->middleware('guest');
+        $token = null;
+        //$credentials = $request->only('name', 'password');
+        try {
+            if (!$token = JWTAuth::attempt( ['name'=>$name, 'password'=>$password])) {
+                return response()->json([
+                    'response' => 'error',
+                    'message' => 'Password or name is invalid',
+                    'token'=>$token
+                ]);
+            }
+        } catch (JWTAuthException $e) {
+            return response()->json([
+                'response' => 'error',
+                'message' => 'Token creation failed',
+            ]);
+        }
+        return $token;
     }
 
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -62,18 +58,36 @@ class RegisterController extends Controller
 // ONE NUMBER           (?=.*?[0-9])
 // One letter           (^[A-Za-z]\\d+$)
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\User
-     */
-    protected function create(array $data)
+
+    public function registerUser(Request $request)
     {
-        return User::create([
-            'name' => $data['name'],
-            // 'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+
+       $validate_data = $this->validator($request->all())->validate();
+
+        $payload = [
+            'password'=>\Hash::make($validate_data['password']),
+            'name'=>$validate_data['name'],
+            'auth_token'=> ''
+        ];
+
+        $user = new \App\User($payload);
+        if ($user->save())
+        {
+
+
+            $token = self::getToken($validate_data['name'], $validate_data['password']); // generate user token
+
+            if (!is_string($token))  return response()->json(['success'=>false,'data'=>'Token generation failed'], 201);
+
+            $user = \App\User::where('name', $validate_data['name'])->get()->first();
+
+            $user->auth_token = $token; // update user token
+
+            $user->save();
+
+            Session::put(['user'=>$user]);
+            return redirect()->route('calendar');
+        }
+
     }
 }
