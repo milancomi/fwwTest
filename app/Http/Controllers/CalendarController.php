@@ -34,24 +34,34 @@ class CalendarController extends Controller
     }
 
 
+
+
+
+    public function deleteEvent(Request $request)
+    {
+        if($request->ajax())
+        {
+            Task::find($request->event_id)->delete();
+        }
+
+    }
+
+
+    public function updateEvent(Request $request)
+    {
+        if($request->ajax())
+        {
+            $task = Task::find($request->event_id);
+            $task->update([
+                'title'=>$request->event_title,
+            ]);
+        }
+    }
     public function fetchData()
     {
 
        $events = Task::all();
 
         return response()->json($events);
-
-
-
-        return response()->json([
-            ["title"=>"Musko sisanje Slavko",
-            "start"=>"2020-07-14T09:30:00",
-            "end"=>"2020-07-14T10:15:00",
-        ],
-        ["title"=>"Zensko sisanje Zorica",
-        "start"=>"2020-07-14T10:30:00",
-        "end"=>"2020-07-14T12:15:00"
-    ]
-            ]);
-    }    //
+    }
 }

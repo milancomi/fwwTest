@@ -26,9 +26,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/fetch_data','CalendarController@fetchData');
 
 Route::post('/postEvent','CalendarController@addEvent')->name('addEvent');
+Route::post('/deleteEvent','CalendarController@deleteEvent')->name('deleteEvent');
+Route::post('/updateEvent','CalendarController@updateEvent')->name('updateEvent');
+
+
+
 
 Route::post('/register','Auth\RegisterController@registerUser')->name('registerUser');
 
 
 Route::get('/register','Auth\RegisterController@showRegistrationForm')->name('register');
 Route::get('/calendar','HomeController@index')->name('calendar');
+
+
+
