@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Task extends Model
 {
     protected $fillable = [
-        'start', 'end', 'title','backgroundColor',
+        'start', 'end', 'title','backgroundColor','classNames'
     ];
 
 

@@ -1,4 +1,5 @@
 
+<html>
 <meta charset='utf-8' />
 <link href='assets/fullcalendar/packages/core/main.css' rel='stylesheet' />
 <link href='assets/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
@@ -10,32 +11,33 @@
 <script src='assets/fullcalendar/packages/timegrid/main.js'></script>
 <script src='assets/fullcalendar/packages/list/main.js'></script>
 <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+
+
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
-      plugins: [ 'dayGrid', 'timeGrid', 'list', 'interaction' ],
+      plugins: [ 'dayGrid', 'interaction' ],
       header: {
         left: 'prev,next today',
         center: 'title',
-        right: 'listWeek'
+        right: '',
       },
-      selectable:true,
-      selectHelper:true,
-      select:function(start,end,allDay)
+      dayMaxEvents: 1,
+      events: {
+        url: 'fetch_data',
+      },
+
+      
+      dateClick:function(start,end,allDay)
       {
+          console.log(start);
 
-        console.log(start);
-          /*  var start = calendar.formatDate(start,"Y-MM-DD HH:mm:ss");
-          var start = calendar.formatDate(start,"Y-MM-DD HH:mm:ss");
-            var end = calendar.formatDate(end,"Y-MM-DD HH:mm:ss");
-            */
-           var startEvent = start.startStr;
-           var endEvent = start.endStr;
+        var date = start.dateStr;
 
-        console.log(startEvent,endEvent);
         var title = prompt("Enter Event Title");
         if(title)
         {
@@ -46,104 +48,30 @@
                data:{
                    _token:"{{ csrf_token() }}",
                    title:title,
-                   start:startEvent,
-                   end:endEvent,
-                   start2:start.start,
-                   end2:start.end
+                   date:date
                },
                success:function(data) {
-                console.log(data);
                    calendar.refetchEvents();
-                   alert("Added Successfully")
-
-
                }
             });
         }
 
          },
-      defaultDate: '2020-05-12',
+
+      defaultDate: new Date(),
       navLinks: true, // can click day/week names to navigate views
-      editable: true,
-      eventOverlap:false,
+      editable: false,
       displayEventTime: false,
       locale:"sr",
       eventLimit: true, // allow "more" link when too many events
+      views: { month: { eventLimit: 1 ,selectOverlap:false} },
+      contentHeight: 500,
 
   eventClick: function(info) {
+      console.log(info.event.id);
     alert('Event: ' + info.event.title);
-    alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
-    alert('View: ' + info.view.type);
 
-    // change the border color just for fun
-    info.el.style.borderColor = 'red';
   },
-      events: {
-        url: 'fetch_data',
-        failure: function() {
-          document.getElementById('script-warning').style.display = 'block'
-        }
-      },
-      loading: function(bool) {
-        document.getElementById('loading').style.display =
-          bool ? 'block' : 'none';
-      }
-    //   events: [
-    //     {
-    //       title: 'All Day Event',
-    //       start: '2020-05-01',
-    //     },
-    //     {
-    //       title: 'Long Event',
-    //       start: '2020-05-07',
-    //       end: '2020-05-10'
-    //     },
-    //     {
-    //       groupId: 999,
-    //       title: 'Repeating Event',
-    //       start: '2020-05-09T16:00:00'
-    //     },
-    //     {
-    //       groupId: 999,
-    //       title: 'Repeating Event',
-    //       start: '2020-05-16T16:00:00'
-    //     },
-    //     {
-    //       title: 'Conference',
-    //       start: '2020-05-11',
-    //       end: '2020-05-13'
-    //     },
-    //     {
-    //       title: 'Meeting',
-    //       start: '2020-05-12T10:30:00',
-    //       end: '2020-05-12T12:30:00'
-    //     },
-    //     {
-    //       title: 'Lunch',
-    //       start: '2020-05-12T12:00:00'
-    //     },
-    //     {
-    //       title: 'Meeting',
-    //       start: '2020-05-12T14:30:00'
-    //     },
-    //     {
-    //       title: 'Happy Hour',
-    //       start: '2020-05-12T17:30:00'
-    //     },
-    //     {
-    //       title: 'Dinner',
-    //       start: '2020-05-12T20:00:00'
-    //     },
-    //     {
-    //       title: 'Birthday Party',
-    //       start: '2020-05-13T07:00:00'
-    //     },
-    //     {
-    //       title: 'Click for Google',
-    //       url: 'http://google.com/',
-    //       start: '2020-05-28'
-    //     }
-    //   ]
     });
 
     calendar.render();
@@ -154,9 +82,13 @@
     html, body {
       overflow: hidden; /* don't do scrollbars */
       font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-      font-size: 14px;
+      font-size: 15px;
     }
-
+.fc-content{
+  font-weight: 700;
+  width: 80%;
+    text-overflow: ellipsis;
+}
     #calendar-container {
       position: fixed;
       top: 0;
@@ -174,17 +106,23 @@
       padding-left: 1em;
       padding-right: 1em;
     }
+.myClass{
+    margin-top: -1.33rem !important;
+    min-height: 3.9rem !important;
+    height: 5.4rem  !important;
 
+}
+
+.fc-day-number{
+  position: relative !important;
+    z-index: 300;
+    padding-right: 0.7rem !important;
+
+}
   </style>
 </head>
 <body>
 
   <div id='calendar'></div>
-
-  <div id='script-warning'>
-    <code>php/get-events.php</code> must be running.
-  </div>
-
-  <div id='loading'>loading...</div>
 </body>
 </html>

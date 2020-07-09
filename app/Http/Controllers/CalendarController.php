@@ -13,8 +13,8 @@ class CalendarController extends Controller
     {
 
         $title = $request->title;
-        $startEvent = $request->start."T00:00:00";
-        $endEvent = $request->end."T00:00:00";
+        $startEvent = $request->date."T00:00:01";
+        $endEvent = $request->date."T23:59:00";
         // Fastest solution for fixed Event Day time
 
         $colorEvent  = '#'.mt_rand(100000,999999);
@@ -25,7 +25,8 @@ class CalendarController extends Controller
             'start'=>$startEvent,
             'end'=>$endEvent,
             'title'=>$title,
-            'backgroundColor'=>$colorEvent
+            'backgroundColor'=>$colorEvent,
+            'classNames'=>'myClass'
         ]);
 
 

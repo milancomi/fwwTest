@@ -17,6 +17,7 @@ class CreateTasksTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('backgroundColor');
+            $table->string('classNames');
             $table->dateTime('start');
             $table->dateTime('end');
             $table->timestamps();
