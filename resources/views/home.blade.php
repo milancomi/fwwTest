@@ -34,8 +34,6 @@
       events: {
         url: 'fetch_data',
       },
-
-
       dateClick:function(start,end,allDay)
       {
           console.log(start);
@@ -63,7 +61,7 @@
          },
 
       defaultDate: new Date(),
-      navLinks: true, // can click day/week names to navigate views
+      navLinks: false, // can click day/week names to navigate views
       editable: false,
       displayEventTime: false,
       locale:"sr",
@@ -85,6 +83,10 @@
   });
 
 </script><style>
+
+#event_title{
+    width: 70% !important;
+}
 
     html, body {
       overflow: hidden; /* don't do scrollbars */
@@ -141,14 +143,16 @@
           <h4 class="modal-title">Edit Event</h4>
         </div>
         <div class="modal-body">
-            <form id="productForm" name="productForm" class="form-horizontal">
-            <div class="form-group">
+<div class="container">
+            <form id="productForm" name="productForm" class="form-horizontal" >
+            <div class="form-group  ">
                 <label for="exampleFormControlTextarea1">Event description</label>
                 <textarea class="form-control" id="event_title" rows="3"></textarea>
               </div>
 
               <input type="hidden" id="event_id" name="custId" >
             </form>
+        </div>
             </div>
 
         <div class="modal-footer">
@@ -163,15 +167,13 @@
 
     </div>
   </div>
-
-  <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
-
   <script>
 $(document).ready(function() {
     $('#deleteEvent').click(function (e) {
 
 e.preventDefault();
 var event_id = $('#event_id').val();
+
         $.ajax({
                type:'POST',
                 url:"{{route('deleteEvent')}}",
@@ -193,10 +195,14 @@ var event_id = $('#event_id').val();
 
     $('#updateEvent').click(function (e) {
 
+
 e.preventDefault();
 var event_id = $('#event_id').val();
 var event_title = $('#event_title').val();
-
+if(event_title ===""){
+    alert("PLEASEEE DONTT DO ITTT I'am little junior, update with regular Title :P ");
+}
+else{
 console.log(event_title);
         $.ajax({
                type:'POST',
@@ -212,10 +218,9 @@ console.log(event_title);
                }
             });
 
-
+}
 
     });
-
 
 
     });

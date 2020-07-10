@@ -43,6 +43,13 @@ class RegisterController extends Controller
         return view('auth.register');
     }
 
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+
+
     protected function validator(array $data)
     {
         return Validator::make($data, [
