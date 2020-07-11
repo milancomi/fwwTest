@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-
+use Session;
 class HomeController extends Controller
 {
     /**
@@ -25,6 +25,10 @@ class HomeController extends Controller
     public function index()
     {
 
+        if(!Session::has('user'))
+        {
+            return redirect()->route('welcome')->with('alert','You have to login/register first!');
+        }
         return view('home');
     }
 }

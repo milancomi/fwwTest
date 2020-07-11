@@ -23,7 +23,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'auth'], function () {
 
     Route::post('login','Auth\LoginController@login')->name('loginApi');
-    Route::post('logout','AuthController@logout');
+    Route::post('logout','AuthController@logout')->name('logout');
     Route::post('refresh','AuthController@refresh');
     Route::post('me','AuthController@me');
 

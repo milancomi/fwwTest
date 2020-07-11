@@ -92,7 +92,7 @@ class RegisterController extends Controller
 
             $user->save();
 
-            Session::put(['user'=>$user]);
+            Session::put(['user'=>$user,'token'=>$token]);
             return redirect()->route('calendar');
         }
 
