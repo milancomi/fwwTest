@@ -1,23 +1,22 @@
 
-<html>
-<meta charset='utf-8' />
-<link href='assets/fullcalendar/packages/core/main.css' rel='stylesheet' />
+@extends('layouts.app')
+@section('externalIncludes')
+{{-- <link href='assets/fullcalendar/packages/core/main.css' rel='stylesheet' />
 <link href='assets/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
 <link href='assets/fullcalendar/packages/timegrid/main.css' rel='stylesheet' />
-<link href='assets/fullcalendar/packages/list/main.css' rel='stylesheet' />
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link href='assets/fullcalendar/packages/list/main.css' rel='stylesheet' /> --}}
+
+{{-- <link rel="stylesheet" src="css/bootstrap.min.css"> --}}
+{{-- <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"> --}}
+<link href="{{ asset('css/CalendarStyle.css') }}" rel="stylesheet">
+
+<script src="{{ asset('js/jquery.min.js') }}" ></script>
+{{-- <script src="{{ asset('js/bootstrap.min.js') }}"></script> --}}
 <script src='assets/fullcalendar/packages/core/main.js'></script>
 <script src='assets/fullcalendar/packages/interaction/main.js'></script>
 <script src='assets/fullcalendar/packages/daygrid/main.js'></script>
-<script src='assets/fullcalendar/packages/timegrid/main.js'></script>
-<script src='assets/fullcalendar/packages/list/main.js'></script>
-<script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-
-
-
+@endsection
+@section('content')
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -139,8 +138,8 @@
       <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
+            <h4 class="modal-title">Edit Event</h4>
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Edit Event</h4>
         </div>
         <div class="modal-body">
 <div class="container">
@@ -157,11 +156,11 @@
 
         <div class="modal-footer">
             <button type="submit" id="deleteEvent" class="btn btn-danger">Delete Event &nbsp; <i class="fa fa-trash" aria-hidden="true"></i></button>
-
+            &nbsp;
             <button type="submit" id="updateEvent" class="btn btn-primary">Update &nbsp; <i class="fa fa-refresh" aria-hidden="true"></i>
             </button>
-
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close &nbsp; <i class="fa fa-times"></i></button>
+            &nbsp;
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close &nbsp; <i class="fa fa-times"></i></button>
         </div>
       </div>
 
@@ -170,7 +169,6 @@
   <script>
 $(document).ready(function() {
     $('#deleteEvent').click(function (e) {
-
 e.preventDefault();
 var event_id = $('#event_id').val();
 
@@ -189,9 +187,6 @@ var event_id = $('#event_id').val();
 
 
 
-    });
-
-    $(document).ready(function() {
 
     $('#updateEvent').click(function (e) {
 
@@ -225,27 +220,6 @@ console.log(event_title);
 
     });
 
-
-    $('#deleteEvent').click(function (e) {
-
-e.preventDefault();
-var event_id = $('#event_id').val();
-        $.ajax({
-               type:'POST',
-                url:"{{route('updateEvent')}}",
-               data:{
-                   _token:"{{ csrf_token() }}",
-                   event_id: event_id,
-               },
-               success:function() {
-                $('#myModal').modal('toggle');
-                document.globalCalendar.refetchEvents();
-               }
-            });
-
-
-
-    });
 });
 
 
@@ -255,5 +229,4 @@ var event_id = $('#event_id').val();
 
   </script>
 
-</body>
-</html>
+@endsection

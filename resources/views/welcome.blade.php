@@ -11,7 +11,7 @@
     </div>
 @endif
 
-        
+
                 </h1>
 
                 <div class="title m-b-md">
