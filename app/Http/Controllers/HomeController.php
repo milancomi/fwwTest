@@ -31,4 +31,17 @@ class HomeController extends Controller
         }
         return view('home');
     }
+
+
+    public function showRegistrationForm()
+    {
+        return view('auth.register');
+    }
+
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+
 }

@@ -20,24 +20,22 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::post('/login','AuthController@login')->name('login_api');
+Route::post('/register','Auth\RegisterController@registerUser')->name('registerUser');
+
+Route::get('/register','HomeController@showRegistrationForm')->name('register');
+Route::get('/loginForm','HomeController@showLoginForm')->name('login');
 
 
+/**
+ * Calendar Routes
+ * */
+Route::get('/calendar','HomeController@index')->name('calendar');
 Route::get('/fetch_data','CalendarController@fetchData');
-
 Route::post('/postEvent','CalendarController@addEvent')->name('addEvent');
 Route::post('/deleteEvent','CalendarController@deleteEvent')->name('deleteEvent');
 Route::post('/updateEvent','CalendarController@updateEvent')->name('updateEvent');
 
-
-
-Route::post('/login','AuthController@login')->name('login_api');
-Route::post('/register','Auth\RegisterController@registerUser')->name('registerUser');
-
-
-Route::get('/register','Auth\RegisterController@showRegistrationForm')->name('register');
-Route::get('/loginForm','Auth\RegisterController@showLoginForm')->name('login');
-
-Route::get('/calendar','HomeController@index')->name('calendar');
 
 
 

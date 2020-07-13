@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Session;
 use Validator;
+use JWTAuth;
+use JWTAuthException;
+
+
 class AuthController extends Controller
 {
     /**
@@ -16,9 +20,29 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['login']]);
+        $this->middleware('auth:api', ['except' => ['login','registerUser']]);
     }
 
+    private function getToken($name, $password)
+    {
+        $token = null;
+        //$credentials = $request->only('name', 'password');
+        try {
+            if (!$token = JWTAuth::attempt( ['name'=>$name, 'password'=>$password])) {
+                return response()->json([
+                    'response' => 'error',
+                    'message' => 'Password or name is invalid',
+                    'token'=>$token
+                ]);
+            }
+        } catch (JWTAuthException $e) {
+            return response()->json([
+                'response' => 'error',
+                'message' => 'Token creation failed',
+            ]);
+        }
+        return $token;
+    }
     /**
      * Get a JWT via given credentials.
      *
@@ -48,7 +72,6 @@ class AuthController extends Controller
         Session::put(['user'=>$user,'token_info'=>$JWT_Info]);
         return response()->json(route('calendar'));
        }
-
     /**
      * Get the authenticated User.
      *
@@ -99,12 +122,14 @@ class AuthController extends Controller
     }
 
 
-    public function register(Request $request)
+    public function registerUser(Request $request)
     {
+
+       $validate_data = $this->validator($request->all())->validate();
+
         $payload = [
-            'password'=>\Hash::make($request->password),
-            'email'=>$request->email,
-            'name'=>$request->name,
+            'password'=>\Hash::make($validate_data['password']),
+            'name'=>$validate_data['name'],
             'auth_token'=> ''
         ];
 
@@ -112,26 +137,22 @@ class AuthController extends Controller
         if ($user->save())
         {
 
-            $token = self::getToken($request->email, $request->password); // generate user token
+
+            $token = self::getToken($validate_data['name'], $validate_data['password']); // generate user token
 
             if (!is_string($token))  return response()->json(['success'=>false,'data'=>'Token generation failed'], 201);
 
-            $user = \App\User::where('email', $request->email)->get()->first();
+            $user = \App\User::where('name', $validate_data['name'])->get()->first();
 
             $user->auth_token = $token; // update user token
 
             $user->save();
 
-            $response = ['success'=>true, 'data'=>['name'=>$user->name,'id'=>$user->id,'email'=>$request->email,'auth_token'=>$token]];
+            Session::put(['user'=>$user,'token'=>$token]);
+            return redirect()->route('calendar');
         }
-        else
-            $response = ['success'=>false, 'data'=>'Couldnt register user'];
 
-
-        return response()->json($response, 201);
     }
-
-
 
     protected function createNewToken($token){
 
