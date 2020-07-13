@@ -78,7 +78,7 @@
     });
 
     calendar.render();
-    document.globalCalendar  = calendar;
+    document.globalCalendar=calendar;
     // global variable solution, treba mi refetch funkcija
   });
 

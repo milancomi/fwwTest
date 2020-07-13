@@ -6,7 +6,6 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
-
                 <div class="card-body">
 
                             <div id="error_field" class="alert alert-danger d-none">
@@ -80,15 +79,21 @@ var password = $('#password').val();
 
         $.ajax({
                type:'POST',
-                url:"{{route('loginApi')}}",
+                url:"{{route('login_api')}}",
                data:{
                    _token:"{{ csrf_token() }}",
                    name: name,password,
                    password:password
                },
                success:function(data) {
+                   if(data.startsWith("http"))
+                   {
+                    window.location.href = data;
+
+                   } else{
                 $('#error_content').text(data);
                 $('#error_field').removeClass('d-none');
+                   }
 
                }
             });

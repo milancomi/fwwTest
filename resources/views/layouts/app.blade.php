@@ -84,13 +84,12 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
 
                     </ul>
-                    @if(Session::has('user'))
+                    @if(session()->has('user'))
                     Vaš token: &nbsp;<br/>
                       <textarea class="form-control" style="width:50%;" rows="2">{{ session('user')->auth_token}}</textarea>
 
@@ -100,21 +99,11 @@
 
                             <a class="nav-link" href="{{ url('/calendar') }}">Calendar</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
+                            @if(session()->has('user'))
 
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">Register</a>
-                                </li>
-
-
-
-                                {{-- @if(Auth::user()) --}}
-                                <li class="nav-item dropdown">
+                            <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{-- {{ Auth::user()->name }} --}}
-
+                                    {{ session('user')->name }}
                                     <span class="caret"></span>
                                 </a>
 
@@ -124,7 +113,18 @@
                                     </a>
                                 </div>
                             </li>
-                            {{-- @endif --}}
+
+                            @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">Register</a>
+                                </li>
+
+                            @endif
+
                     </ul>
                 </div>
             </div>
@@ -137,34 +137,30 @@
         </main>
     </div>
 
+    @if(session()->has('user'))
     <script>
-
-
 
 $(document).ready(function() {
     $('#logout').click(function (e) {
 
 e.preventDefault();
-
+var token ="{{session('user')->auth_token}}";
 $.ajax({
                type:'POST',
                 url:"{{ route('logout') }}",
                data:{
-                   token:"{{ session('user')->auth_token }}",
-               },
-               success:function() {
+                   token:token,
 
+                    _token:token
+               },
+               success:function(data) {
+                   window.location.href = data;
                }
             });
-
-
-
     });
-
-
 });
-
-
     </script>
+
+    @endif
 </body>
 </html>

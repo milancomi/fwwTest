@@ -30,7 +30,7 @@ Route::post('/updateEvent','CalendarController@updateEvent')->name('updateEvent'
 
 
 
-
+Route::post('/login','AuthController@login')->name('login_api');
 Route::post('/register','Auth\RegisterController@registerUser')->name('registerUser');
 
 

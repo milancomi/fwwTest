@@ -21,6 +21,7 @@ class LoginController extends Controller
      */
     public function login(Request $request){
 
+
     	$validator = Validator::make($request->all(), [
             'name' => 'required',
             'password' => 'required|string|min:6',
@@ -40,7 +41,7 @@ class LoginController extends Controller
         $user = auth()->user();
 
         Session::put(['user'=>$user,'token_info'=>$JWT_Info]);
-        return redirect()->route('calendar');
+        return response()->json(route('calendar'));
        }
 
     /**

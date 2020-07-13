@@ -26,7 +26,6 @@ Route::group(['prefix' => 'auth'], function () {
     Route::post('logout','AuthController@logout')->name('logout');
     Route::post('refresh','AuthController@refresh');
     Route::post('me','AuthController@me');
-
     Route::post('/register','Auth\RegisterController@registerUser')->name('registerUser');
 
 });
