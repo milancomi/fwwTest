@@ -1,17 +1,10 @@
 
 @extends('layouts.app')
 @section('externalIncludes')
-{{-- <link href='assets/fullcalendar/packages/core/main.css' rel='stylesheet' />
-<link href='assets/fullcalendar/packages/daygrid/main.css' rel='stylesheet' />
-<link href='assets/fullcalendar/packages/timegrid/main.css' rel='stylesheet' />
-<link href='assets/fullcalendar/packages/list/main.css' rel='stylesheet' /> --}}
 
-{{-- <link rel="stylesheet" src="css/bootstrap.min.css"> --}}
-{{-- <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet"> --}}
 <link href="{{ asset('css/CalendarStyle.css') }}" rel="stylesheet">
 
 <script src="{{ asset('js/jquery.min.js') }}" ></script>
-{{-- <script src="{{ asset('js/bootstrap.min.js') }}"></script> --}}
 <script src='assets/fullcalendar/packages/core/main.js'></script>
 <script src='assets/fullcalendar/packages/interaction/main.js'></script>
 <script src='assets/fullcalendar/packages/daygrid/main.js'></script>
@@ -30,6 +23,9 @@
         right: '',
       },
       dayMaxEvents: 1,
+      buttonText:{
+        today:    'danas',
+      },
       events: {
         url: 'fetch_data',
       },
@@ -58,13 +54,12 @@
         }
 
          },
-
       defaultDate: new Date(),
-      navLinks: false, // can click day/week names to navigate views
+      navLinks: false,
       editable: false,
       displayEventTime: false,
       locale:"sr",
-      eventLimit: true, // allow "more" link when too many events
+      eventLimit: false,
       views: { month: { eventLimit: 1 ,selectOverlap:false} },
       contentHeight: 500,
 
@@ -81,53 +76,7 @@
     // global variable solution, treba mi refetch funkcija
   });
 
-</script><style>
-
-#event_title{
-    width: 70% !important;
-}
-
-    html, body {
-      overflow: hidden; /* don't do scrollbars */
-      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-      font-size: 15px;
-    }
-.fc-content{
-  font-weight: 700;
-  width: 80%;
-    text-overflow: ellipsis;
-}
-    #calendar-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-    }
-
-    .fc-header-toolbar {
-      /*
-      the calendar will be butting up against the edges,
-      but let's scoot in the header's buttons
-      */
-      padding-top: 1em;
-      padding-left: 1em;
-      padding-right: 1em;
-    }
-.myClass{
-    margin-top: -1.33rem !important;
-    min-height: 3.9rem !important;
-    height: 5.4rem  !important;
-
-}
-
-.fc-day-number{
-  position: relative !important;
-    z-index: 300;
-    padding-right: 0.7rem !important;
-
-}
-  </style>
+</script>
 </head>
 <body>
 
@@ -185,8 +134,9 @@ var event_id = $('#event_id').val();
                }
             });
 
+    });
 
-
+            $(document).ready(function() {
 
     $('#updateEvent').click(function (e) {
 

@@ -20,3 +20,51 @@ $cyan: #6cb2eb;
 
 
 
+
+
+#event_title{
+    width: 70% !important;
+}
+
+    html, body {
+      overflow: hidden; /* don't do scrollbars */
+      font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+      font-size: 15px;
+    }
+.fc-content{
+  font-weight: 700;
+  color: aliceblue;
+  width: 80%;
+    text-overflow: ellipsis;
+}
+    #calendar-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .fc-header-toolbar {
+      /*
+      the calendar will be butting up against the edges,
+      but let's scoot in the header's buttons
+      */
+      padding-top: 1em;
+      padding-left: 1em;
+      padding-right: 1em;
+    }
+.myClass{
+    margin-top: -1.33rem !important;
+    min-height: 3.9rem !important;
+    height: 5.4rem  !important;
+
+}
+
+.fc-day-number{
+  position: relative !important;
+    z-index: 300;
+    padding-right: 0.7rem !important;
+
+}
+
